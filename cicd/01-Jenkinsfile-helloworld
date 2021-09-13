@@ -4,7 +4,7 @@ pipeline {
     stage ('Build') {
       steps {
         sh 'echo Hello Build stage'
-        sh 'echo test changes'
+        sh 'echo test poll changes'
       }
     }
     stage ('Test') {
