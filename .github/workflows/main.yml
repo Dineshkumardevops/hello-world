@@ -1,0 +1,27 @@
+
+
+name: CI/CD
+on:
+  push:
+    branches: master
+  pull_request:
+    branches: master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout
+          uses: actions/checkout@v2
+        
+        - name: Setup Maven
+          uses: stCarolas/setup-maven@v4.2
+          with:
+            maven_version: 3.6.0
+        
+        - name: Maven build
+          run: |
+              mvn --version
+              mvn clean package
+
