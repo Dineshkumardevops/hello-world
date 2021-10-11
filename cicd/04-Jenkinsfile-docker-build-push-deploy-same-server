@@ -16,7 +16,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("dineshkumardevops/hello-world:0.1")
+                    docker.build("dineshkumardevops/hello-world:${TAG}")
                 }
             }
         }
@@ -24,8 +24,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
-                        docker.image("dineshkumardevops/hello-world:0.1").push()
-                        docker.image("dineshkumardevops/hello-world:0.1").push("latest")
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push()
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push("latest")
                     }
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh "docker stop hello-world | true"
                 sh "docker rm hello-world | true"
-                sh "docker run --name hello-world -d -p 9004:8080 dineshkumardevops/hello-world:0.1"
+                sh "docker run --name hello-world -d -p 9002:8080 dineshkumardevops/hello-world:${TAG}"
             }
         }
     }
