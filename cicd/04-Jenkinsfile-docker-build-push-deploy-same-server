@@ -1,7 +1,12 @@
+
 pipeline {
     agent any
     tools {
         maven 'maven-3.6.3' 
+    }
+    environment {
+        DATE = new Date().format('yy.M')
+        TAG = "${DATE}.${BUILD_NUMBER}"
     }
     stages {
         stage ('Build') {
@@ -12,7 +17,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("dineshkumardevops/hello-world:0.2")
+                    docker.build("dineshkumardevops/hello-world:${TAG}")
                 }
             }
         }
@@ -20,8 +25,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
-                        docker.image("dineshkumardevops/hello-world:0.2").push()
-                        docker.image("dineshkumardevops/hello-world:0.2").push("latest")
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push()
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push("latest")
                     }
                 }
             }
@@ -30,7 +35,7 @@ pipeline {
             steps {
                 sh "docker stop hello-world | true"
                 sh "docker rm hello-world | true"
-                sh "docker run --name hello-world -d -p 9002:8080 dineshkumardevops/hello-world:0.2"
+                sh "docker run --name hello-world -d -p 9001:8080 dineshkumardevops/hello-world:${TAG}"
             }
         }
     }
