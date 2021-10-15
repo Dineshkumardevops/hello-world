@@ -16,7 +16,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("default-docker-local/hello-world:${TAG}")
+                    docker.build("dev-docker-local/hello-world:${TAG}")
                 }
             }
         }
@@ -24,8 +24,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://dineshkumardevops.jfrog.io', 'artifactory-credential') {
-                        docker.image("default-docker-local/hello-world:${TAG}").push()
-                        docker.image("default-docker-local/hello-world:${TAG}").push("latest")
+                        docker.image("dev-docker-local/hello-world:${TAG}").push()
+                        docker.image("dev-docker-local/hello-world:${TAG}").push("latest")
                     }
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh "docker stop hello-world | true"
                 sh "docker rm hello-world | true"
-                sh "docker run --name hello-world -d -p 9004:8080 dineshkumardevops.jfrog.io/default-docker-local/hello-world:${TAG}"
+                sh "docker run --name hello-world -d -p 9004:8080 dineshkumardevops.jfrog.io/dev-docker-local/hello-world:${TAG}"
             }
         }
     }
