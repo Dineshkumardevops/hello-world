@@ -29,7 +29,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    docker.build("vigneshsweekaran/hello-world:${TAG}")
+                    docker.build("dineshkumardevops/hello-world:${TAG}")
                 }
             }
         }
@@ -37,8 +37,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
-                        docker.image("vigneshsweekaran/hello-world:${TAG}").push()
-                        docker.image("vigneshsweekaran/hello-world:${TAG}").push("latest")
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push()
+                        docker.image("dineshkumardevops/hello-world:${TAG}").push("latest")
                     }
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
         stage('Anchore Scanning') {
             steps {
                 script {
-                    def imageLine = "vigneshsweekaran/hello-world:${TAG}"
+                    def imageLine = "dineshkumardevops/hello-world:${TAG}"
                     writeFile file: 'anchore_images', text: imageLine
                     anchore name: 'anchore_images', bailOnFail: false
                 }
@@ -56,7 +56,7 @@ pipeline {
             steps {
                 sh "docker stop hello-world | true"
                 sh "docker rm hello-world | true"
-                sh "docker run --name hello-world -d -p 9004:8080 vigneshsweekaran/hello-world:${TAG}"
+                sh "docker run --name hello-world -d -p 9003:8080 dineshkumardevops/hello-world:${TAG}"
             }
         }
     }
